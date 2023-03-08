@@ -1,19 +1,20 @@
-const { json } = require('express')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
-exports.auth = (req, res, next) =>{
+module.exports = (req, res, next) =>{
     try{
-        const token = req.header.authorization.split('')[1]
-        const decodedToken = jwt.verify(token, 'My secret key to decode token ')
+     //     console.log(req.headers.authorization.split(' ')[1])
+         const token = req.headers.authorization.split(' ')[1];
+        
+         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
+         const userId = decodedToken.userId;
+     //     console.log(decodedToken)
+         req.auth ={
+            userId: userId
+         }
+         next();
 
-        const userid = decodedToken.userid
-        req.auth={
-            userid:userid
-        }
-        next()
     }
-    catch{
-        res.status(403).json({message:"access not authorized!!!"})
+    catch(err){
+         res.status(401).json({err})
     }
- 
 }

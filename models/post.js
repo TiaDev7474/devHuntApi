@@ -1,9 +1,9 @@
-const { default: mongoose } = require('mongoose')
-const moongose = require('moongose')
+
+const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema({
      author:{
-        type:mongoose.type.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'user'
      },
      Title:{
@@ -18,11 +18,11 @@ const postSchema = mongoose.Schema({
         type:String
     }],
     like:[{
-        type:mongoose.Schame.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'user'   
     }],
     comments:[{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'comment'
     }]
 
@@ -32,4 +32,4 @@ const postSchema = mongoose.Schema({
      }
 )
 
-module.exports = moongose.model('Post', postSchema)
+module.exports = mongoose.model('Post', postSchema)
