@@ -17,17 +17,17 @@ const MIME_TYPES = {
            cb(null, name + Date.now()+'.'+fileExtension)
       }
  })
-//  const postFileFilter = (req, res, cb)=>{
-//     if(
-//         file.mimetype == "video/mp4" ||
-//         file.mimetype =="audio/mp3" ||
-//         file.mimetype =="image/jpg"  ||
-//         file.mimetype =='image/jpeg'||
-//         file.mimetype == 'image/png'
-//     ){
-//         cb(null, true)
-//     }else{
-//         cb(null, false)
-//     }
-//  }
- module.exports = multer({storage:storage})
+ const postFileFilter = (req, res, cb)=>{
+    if(
+        file.mimetype == "video/mp4" ||
+        file.mimetype =="audio/mp3" ||
+        file.mimetype =="image/jpg"  ||
+        file.mimetype =='image/jpeg'||
+        file.mimetype == 'image/png'
+    ){
+        cb(null, true)
+    }else{
+        cb(null, false)
+    }
+ }
+ module.exports = multer({storage:storage, fileFilter:postFileFilter})
