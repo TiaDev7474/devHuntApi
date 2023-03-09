@@ -40,7 +40,7 @@ app.use(cors({
  app.use('/api/post', postRoutes)
 app.use('/api/auth', authRoutes)
 
-app.use('/postImage', express.static(path.join(__dirname, 'images')))
+// app.use('/Uploads', express.static(path.join(__dirname, 'images')))
 
 
 

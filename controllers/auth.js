@@ -52,7 +52,7 @@ exports.signUp = (req , res , next)=>{
                
                
              }else{
-                res.status(401).json({message:"There is already an account with this email"})
+                res.status(404).json({message:"already have have an account with this email"})
              }
         })
         .catch(err => res.status(500).json({message:err}))

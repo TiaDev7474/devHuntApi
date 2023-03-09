@@ -23,7 +23,7 @@ const commentSchema = mongoose.Schema({
     }
 }, 
   {
-    timeistamp:true
+    timestamp:true
   }
 )
 

@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const postSchema = mongoose.Schema({
      author:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user'
+        ref:'User'
      },
      Title:{
         type:String,
@@ -19,16 +19,16 @@ const postSchema = mongoose.Schema({
     }],
     like:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user'   
+        ref:'User'   
     }],
     comments:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'comment'
-    }]
+        ref:'Comment'
+    }],
 
 },
      {
-        timeistamp:true
+        timestamp:true
      }
 )
 

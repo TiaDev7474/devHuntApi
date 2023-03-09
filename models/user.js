@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Post = require('../models/post')
 
 const userSchema = mongoose.Schema({
     fname: {
@@ -21,9 +22,13 @@ const userSchema = mongoose.Schema({
         type:Boolean,
         default:false
     },
+    posts:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Post'
+    }],
 },
    {
-     timeistamp:true
+     timestamp:true
    }
 )
 module.exports = mongoose.model('User',userSchema) 
