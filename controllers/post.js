@@ -101,17 +101,17 @@ exports.getAllUserPost = (req, res)=>{
 }
 // get one post using post_id in params
 exports.getOnePost = (req,res)=>{
-     User.findById(req.auth.userId)
+     Post.findById(req.params.id)
+         .populate('author',['fname','lname'])
          .populate({
-          path:'posts',
-          populate:{path :'comments',populate:{path:'author',select:'fname lname'}}
-
+          path:'comments',populate:{path:'author',select:'fname lname'}
+         
         })
-         .then(user=>{
-              if(!user){
+         .then(post=>{
+              if(!post){
                return  res.status(404).json({message:"post not found"})
               }
-              res.status(200).json(user)
+              res.status(200).json(post)
          })
          .catch(err => res.status(500).json({error: err}))
 }

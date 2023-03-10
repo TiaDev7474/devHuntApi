@@ -22,7 +22,7 @@ router.put ('/:id/update',auth,multer.fields([
 
 router.get('/getUserPosts',auth, postController.getAllUserPost)
 //get one post
-router.get('/:id',auth, postController.getOnePost)
+router.get('/:id', postController.getOnePost)
 //deleting post 
 router.delete('/:id',auth ,postController.deleteOne)
 // router.post('/:id/delete', auth, postController.deletePost)
