@@ -9,7 +9,6 @@ const commentController = require('../controllers/comment')
 router.post('/',auth ,multer.fields([
     {name:"video",maxCount:1},
     {name:"image", maxCount:5}
-
 ])
 , postController.addPost)
 //updating post
@@ -32,6 +31,13 @@ router.post('/comment/:id', auth, multer.fields([
     {name:"video",maxCount:1},
     {name:"image",maxCount:5}
 ]), commentController.addComment)
+//update comment
+router.put('/comment/:id',auth,multer.fields([
+    {name:"video",maxCount:1},
+    {name:"image",maxCount:5}
+]),commentController.updateComment)
+//delete comment
+router.delete('/:postID/comment/:commentID/delete',auth, commentController.deleteComment)
 // router.post('/:id/comment',postController.addcomment)
 
 module.exports = router;
