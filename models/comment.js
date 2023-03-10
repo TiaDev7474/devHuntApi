@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const commentSchema = mongoose.Schema({
     author:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user'
+        ref:'User',
+        required:true
     },
     content:{
         type:String,
@@ -15,12 +16,15 @@ const commentSchema = mongoose.Schema({
     }],
     reponse:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'comment'
+        ref:'Comment'
     }],
     post:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'post'
-    }
+        ref:'Post'
+    },
+    imageUrl:[{
+        type:String
+    }]
 }, 
   {
     timestamp:true

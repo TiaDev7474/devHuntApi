@@ -17,9 +17,7 @@ mongoose.connect('mongodb+srv://Nomena:FpvWrPME6S2eFwir@cluster0.jxxdpbu.mongodb
           useUnifiedTopology: true })
         .then(()=> console.log('connexion à MongoDB reussie'))
         .catch(() => console.log('Connexion à MongoDB echoué'));
-
-
-
+        
 //server config 
 const app = express();
 const server = http.createServer(app);
@@ -37,7 +35,7 @@ app.use(cors({
 
 //routes
 
- app.use('/api/post', postRoutes)
+app.use('/api/post', postRoutes)
 app.use('/api/auth', authRoutes)
 
 // app.use('/Uploads', express.static(path.join(__dirname, 'images')))

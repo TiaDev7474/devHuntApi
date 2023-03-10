@@ -22,7 +22,6 @@ exports.addPost = (req, res , next)=>{
    
     post.save()
         .then(post => {  
-            console.log(`req.auth.userId: ${req.auth.userId}`);
                 User.findByIdAndUpdate(req.auth.userId,{$push:{ posts: post._id }},{new:true})
                       .then((user)=>{
                          return res.status(201).json({user:user,post:post})
@@ -45,32 +44,47 @@ exports.updatePost= (req, res)=>{
         ...req.body,
          postUrl:photoArray } : {...req.body}
 
-   User.findOne({_id:req.auth.userId}).
-        populate({
-            path:'posts',
-            populate: { path:'comments'}
-        })
-        .then((user)=>{
-
-            const post = user.posts.find((p) => p._id.toString()===req.params.id.toString());
-                 if(!post){
-                    return res.status(404).json({error:"post not found"})
-                }
-                if(post.author!== req.auth.userId){
-                    return res.status(401).json({error:"Unauthorized"})
-               }
-               Post.updateOne({_id:req.params.id}, postObject)
-                 .then((updatedPost)=>{
-                    req.status(201).json(updatedPost)
-                 })
-                 .catch(err=> res.status(500).json({error:"failed to update post"}))
-
-               
-
-        })
-        .catch(err => res.status(404).json({error:err}))
-
-    }    
+         Post.findOne({_id:req.params.id})
+          .populate({
+           path:'author' ,select:'fname lname'
+          })
+          .populate({
+            path:'comments',
+            populate:{path:'author', select:'fname lname'}
+          })
+          .then(post=>{
+            console.log(post)
+            if(post.author._id.toString()!==req.auth.userId){
+              return res.status(401).json({message:'not authorized'})
+            }else{
+              Post.findByIdAndUpdate({_id:req.params.id},{...postObject,_id:post._id},{new:true})
+              .then(updated => res.status(201).json(updated))
+              .catch(err=> res.status(400).json({error:err}))
+            }
+            
+          })
+          .catch(err => res.status(400).json({error:err}))
+          
+          //  User.findOne({_id:req.auth.userId}).
+          //       populate({path:'posts'})
+          //       .then((user)=>{
+        
+          //           const post = user.posts.find((p) => p._id.toString()===req.params.id.toString());
+          //                if(!post){
+          //                   return res.status(404).json({error:"post not found"})
+          //               }
+          //               if(post.author.toString()!== req.auth.userId){
+          //                   return res.status(401).json({error:"Unauthorized"})
+          //              }
+          //              console.log(post._id)
+          //              Post.findByIdAndUpdate(post._id,{...postObject, _id:post._id,author:req.auth.userId},{new:true})
+          //                .then((updatedPost)=>{
+          //                   req.status(201).json(updatedPost)
+          //                })
+          //                .catch(err=> res.status(500).json({error:"failed to update post"}))
+          //       })
+          //       .catch(err => res.status(404).json({error:err}))
+   }    
 
 
 
@@ -81,18 +95,23 @@ exports.getAllUserPost = (req, res)=>{
       User.findById(req.auth.userId)
           .populate({path: 'posts'})
           .then(user =>{
-               res.status(200).json(user.posts)
+               res.status(200).json(user)
           })
           .catch(err=> res.status(500).json({error:err}))
 }
 // get one post using post_id in params
 exports.getOnePost = (req,res)=>{
-     Post.findById(req.params.id)
-         .then(post=>{
-              if(!post){
+     User.findById(req.auth.userId)
+         .populate({
+          path:'posts',
+          populate:{path :'comments',populate:{path:'author',select:'fname lname'}}
+
+        })
+         .then(user=>{
+              if(!user){
                return  res.status(404).json({message:"post not found"})
               }
-              res.status(200).json(post)
+              res.status(200).json(user)
          })
          .catch(err => res.status(500).json({error: err}))
 }
@@ -106,6 +125,9 @@ exports.deleteOne = (req, res)=>{
          })
          .then(user =>{
               const post = user.posts.find(p => p._id.toString() === req.params.id)
+              const indexOfPost = user.posts.indexOf(post)
+              const removePost = user.posts.splice(indexOfPost,1)
+              console.log(removePost)
               console.log(user.posts)
               if(!post){
                 return res.status(404).json({error:"Post not found"})
@@ -138,10 +160,4 @@ exports.deleteOne = (req, res)=>{
          
 
 } 
-//comment post 
 
-
-//update comments post 
-
-
-//delete comment
